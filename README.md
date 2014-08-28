@@ -1,0 +1,1 @@
+An Angular app that will use Corticon as a backend.
