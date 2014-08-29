@@ -17,8 +17,8 @@ exports.returnData = function(req, res) {
 
 // This is the NodeJS layer that calls the Corticon layer (being simulated by the returnData method)
 exports.reset = function(req, result) {
-    var link = 'http://localhost:3000/api/returnData/';
-    var hostName = 'localhost:3000';
+    var link = 'http://localhost:'+ (process.env.PORT || 3000) +'/api/returnData/';
+    var hostName = 'YOUR HOST NAME HERE';
     var counter = req.body.Objects[0].count;
     var jsonRequest = JSON.stringify({
         "Objects": [{

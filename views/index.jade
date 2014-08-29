@@ -3,7 +3,7 @@ extends layout
 block body
   div(ng-controller='HomeCtrl')
     h2(ng-style='myStyle') Square: {{counter}}
-    input(ng-model='form.newCount' type='number' required min='0')
+    input(ng-model='form.newCount' type='number' required min='0' ng-enter='reset()')
     button(ng-click='reset()') Update Counter
     p {{error}}
   script(src='js/lib/angular/angular.js')
