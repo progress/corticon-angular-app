@@ -35,8 +35,9 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', routes.index);
-app.get('/api/counter', api.count);
 app.post('/api/reset', api.reset);
+app.post('/api/returnData', api.returnData);
+
 
 // redirect all others to the index (HTML5 history)
 app.get('*', routes.index);
