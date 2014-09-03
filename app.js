@@ -18,7 +18,7 @@ var io = require('socket.io').listen(server);
  */
 
 // all environments
-app.set('port', process.env.PORT || 8080);
+app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.logger('dev'));
@@ -51,7 +51,7 @@ app.post('/api/returnData', api.returnData);
 // Socket.io Communication
 io.sockets.on('connection', function(socket) {
 socket.on('send:reset', function(data) {
-        var link = 'http://localhost:' + (process.env.PORT || 8080) + '/api/returnData/';
+        var link = 'http://localhost:' + (process.env.PORT || 3000) + '/api/returnData/';
         var hostName = 'YOUR HOST NAME HERE';
         var counter = data.count;
         var jsonRequest = JSON.stringify({

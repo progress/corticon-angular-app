@@ -6,6 +6,7 @@ block body
     input(ng-model='form.newCount', type='number', required, min='0', ng-enter='reset()')
     button(ng-click='reset()') Update Counter
     p {{error}}
+    
   script(src='/socket.io/socket.io.js')
   script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js')
   script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular-route.min.js')
