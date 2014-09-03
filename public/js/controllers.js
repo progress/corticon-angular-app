@@ -1,18 +1,34 @@
-// This is an app that displays a counter squared. To do so, it sends the counter to the backend that returns the number to display. 
-function HomeCtrl($scope, $http) {
+'use strict';
+
+/* Controllers */
+
+angular.module('myApp.controllers', []).
+controller('AppCtrl', function($scope, socket) {
     // Clears everything when the page is refreshed
     $scope.form = {};
     var counter = 0;
     $scope.counter = 0;
 
     // This increments the counter every second.
-    var interval = setInterval(increment, 1000);
-
+    var interval = setInterval(update, 1000);
+    function update() {
+        $scope.$apply(increment());
+    }
     function increment() {
         counter++;
-        squareNumber();
+        $scope.myStyle = {
+            'color': '#' + Math.floor(Math.random() * 16777215).toString(16)
+        };
+        $scope.counter = counter * counter;
     }
-
+    socket.on('send:updateCount', function(data) {
+        counter = data.count;
+        $scope.myStyle = {
+            'color': '#' + Math.floor(Math.random() * 16777215).toString(16)
+        };
+        $scope.counter = counter * counter;
+        $scope.form = {};
+    });
     // This updates the counter if the user enters in a new number.
     $scope.reset = function() {
         // If the input is invalid, nothing is done
@@ -22,25 +38,8 @@ function HomeCtrl($scope, $http) {
         }
         counter = $scope.form.newCount;
         $scope.form = {};
-        squareNumber();
+        socket.emit('send:reset', {
+            count: counter
+        });
     };
-
-    // This calls the api, using a JSON format similar to calling Corticon. 
-    function squareNumber() {
-        var jsonRequest = JSON.stringify({
-            "Objects": [{
-                "count": counter
-            }]
-        });
-        $http.post('/api/reset/', jsonRequest).
-        success(function(data) {
-            // Changes the value displayed as well as its color when it gets data from the backend.
-            $scope.myStyle = {
-                'color': '#' + Math.floor(Math.random() * 16777215).toString(16)
-            };
-            console.log(data);
-            $scope.counter = data.squared;
-            $scope.error = '';
-        });
-    }
-}
+});

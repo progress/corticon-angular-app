@@ -1,12 +1,15 @@
 extends layout
 
 block body
-  div(ng-controller='HomeCtrl')
+  div(ng-controller='AppCtrl')
     h2(ng-style='myStyle') Square: {{counter}}
-    input(ng-model='form.newCount' type='number' required min='0' ng-enter='reset()')
+    input(ng-model='form.newCount', type='number', required, min='0', ng-enter='reset()')
     button(ng-click='reset()') Update Counter
     p {{error}}
-  script(src='js/lib/angular/angular.js')
+  script(src='/socket.io/socket.io.js')
+  script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js')
+  script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular-route.min.js')
+  script(src='bower_components/angular-socket-io/socket.js')
   script(src='js/app.js')
   script(src='js/services.js')
   script(src='js/controllers.js')

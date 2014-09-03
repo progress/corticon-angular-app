@@ -1,1 +1,2 @@
-An Angular app that will use Corticon as a backend.
+This is an app using Socket.io and Angular that uses Corticon as the backend. It is based of the [Angular Socket.io Seed](https://github.com/btford/angular-socket-io-seed)
+The app can be viewed on [http://counter-22161.onmodulus.net/](http://counter-22161.onmodulus.net/)

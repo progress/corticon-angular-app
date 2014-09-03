@@ -1,0 +1,12 @@
+{
+  "name": "corticon-angular-app",
+  "version": "0.0.1",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "angular-socket-io": ">=0.6.0",
+  }
+}

@@ -1,49 +1,96 @@
 
 /**
- * Module dependencies.
+ * Module dependencies
  */
 
 var express = require('express'),
   routes = require('./routes'),
-  api = require('./routes/api');
+  api = require('./routes/api'),
+  http = require('http'),
+  path = require('path');
 
-var app = module.exports = express.createServer();
+var app = module.exports = express();
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
 
-// Configuration
+/**
+ * Configuration
+ */
 
-app.configure(function(){
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.set('view options', {
-    layout: false
-  });
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.static(__dirname + '/public'));
-  app.use(app.router);
-});
+// all environments
+app.set('port', process.env.PORT || 8080);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
+app.use(express.logger('dev'));
+app.use(express.bodyParser());
+app.use(express.methodOverride());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(app.router);
 
-
-app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
-
-app.configure('production', function(){
+// development only
+if (app.get('env') === 'development') {
   app.use(express.errorHandler());
-});
+}
 
-// Routes
+// production only
+if (app.get('env') === 'production') {
+  // TODO
+};
 
+
+/**
+ * Routes
+ */
+
+// serve index and view partials
 app.get('/', routes.index);
-app.post('/api/reset', api.reset);
+
+// JSON API
 app.post('/api/returnData', api.returnData);
 
+// Socket.io Communication
+io.sockets.on('connection', function(socket) {
+socket.on('send:reset', function(data) {
+        var link = 'http://localhost:' + (process.env.PORT || 8080) + '/api/returnData/';
+        var hostName = 'YOUR HOST NAME HERE';
+        var counter = data.count;
+        var jsonRequest = JSON.stringify({
+            "Objects": [{
+                "count": counter
+            }]
+        });
+        var contentLength = jsonRequest.length;
+        var request = require('request');
+        var querystring = require('querystring');
+        request({
+            headers: {
+                'content-length': contentLength,
+                'content-type': 'application/json',
+                'connection': 'Keep-Alive',
+                'user-agent': 'NodeJS client',
+                'host': hostName,
+                'dsName': 'PROCESS NAME HERE'
+            },
+            url: link,
+            body: jsonRequest,
+            method: 'POST'
+        }, function(err, res, body) {
+            if (res.statusCode < 400) {
+                var obj = JSON.parse(body);
+                var newCount = obj.Objects[0].newCount;
+                io.sockets.emit('send:updateCount', {
+                    count: newCount
+                });
+                console.log('DATA' + data);
+            }
+        });
+    });
+    });
 
-// redirect all others to the index (HTML5 history)
-app.get('*', routes.index);
+/**
+ * Start Server
+ */
 
-// Start server
-//Modulus uses process.env.PORT while locally it defaults to 3000
-app.listen(process.env.PORT || 3000, function(){
-  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+server.listen(app.get('port'), function () {
+  console.log('Express server listening on port ' + app.get('port'));
 });
