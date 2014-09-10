@@ -40,8 +40,8 @@ Runs like a typical express app:
 
 For a blog post on this project please check out http://mendoncakeegan.wordpress.com/2014/09/04/corticon-counter/
 For more on Rollbase please check out http://www.progress.com/products/corticon.
-For more on AngularJS please check out http://angularjs.org/
-For more on NodeJS please check out http://nodejs.org/
+For more on AngularJS please check out http://angularjs.org/.
+For more on NodeJS please check out http://nodejs.org/.
 
 ## License
 
