@@ -1,5 +1,5 @@
 /*
- * Serve JSON to our AngularJS client
+ * Serve JSON to our client
  */
  // This is simulating the Corticon layer
 exports.returnData = function(req, res) {
